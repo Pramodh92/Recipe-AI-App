@@ -167,7 +167,7 @@ Google Gemini API Key (optional)
 🚀 Installation & Setup
 
 # 1. Clone the repo
-git clone https://github.com/yourusername/recipe-ai-app.git
+git clone https://github.com/yourusername/recipe-ai-app.git](https://github.com/Pramodh92/Recipe-AI-App
 cd recipe-ai-app
 
 # 2. Create virtual environment
@@ -416,3 +416,4 @@ Update documentation
 Happy Cooking! 🍳✨
 
 Let me know if you want this styled for GitHub Pages or turned into a documentation site. I can help scaffold that too.
+
