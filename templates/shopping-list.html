@@ -1,0 +1,1016 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Shopping List - AI Recipe Hub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-lg-8">
+            <h1 class="display-5 fw-bold mb-3">
+                <i class="fas fa-shopping-cart text-success me-3"></i>
+                Smart Shopping List Generator
+            </h1>
+            <p class="lead text-muted">
+                Generate intelligent shopping lists from the recipes with AI-powered categorization
+            </p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+            <div class="shopping-actions d-flex gap-2 flex-wrap justify-content-lg-end">
+                <button class="btn btn-outline-primary" id="loadSavedLists">
+                    <i class="fas fa-history me-1"></i>My Lists
+                </button>
+                <button class="btn btn-success" id="createNewList">
+                    <i class="fas fa-plus me-1"></i>New List
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recipe Selection Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="recipe-selection card shadow border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-utensils me-2"></i>
+                        Add Recipes for Shopping List
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Recipe Search -->
+                   
+
+                    <!-- Manual Recipe Entry -->
+                    <div class="manual-entry mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <h6 class="mb-0 me-3">add recipes manually:</h6>
+                            <button class="btn btn-sm btn-outline-primary" id="addManualRecipe">
+                                <i class="fas fa-plus me-1"></i>Add Recipe
+                            </button>
+                        </div>
+                        <div id="manualRecipeContainer">
+                            <!-- Manual recipe entries will be added here -->
+                        </div>
+                    </div>
+
+                    <!-- Selected Recipes Display -->
+                    <div class="selected-recipes">
+                        <h6 class="mb-3">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Selected Recipes (<span id="selectedCount">0</span>)
+                        </h6>
+                        <div id="selectedRecipesList" class="row g-3">
+                            <!-- Selected recipes will be displayed here -->
+                        </div>
+                    </div>
+
+                    <!-- Generate Button -->
+                    <div class="text-center mt-4">
+                        <button class="btn btn-success btn-lg" id="generateShoppingList" disabled>
+                            <i class="fas fa-magic me-2"></i>
+                            Generate Smart Shopping List
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shopping List Results -->
+    <div id="shoppingListResults" class="row" style="display: none;">
+        <div class="col-lg-8">
+            <div class="shopping-list-card card shadow border-0">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list-alt me-2"></i>
+                        Your Shopping List
+                    </h5>
+                    <div class="list-actions">
+                        <button class="btn btn-sm btn-light text-dark" id="printShoppingList">
+                            <i class="fas fa-print me-1"></i>Print
+                        </button>
+                        <button class="btn btn-sm btn-light text-dark" id="exportPDF">
+                            <i class="fas fa-download me-1"></i>PDF
+                        </button>
+                        <button class="btn btn-sm btn-light text-dark" id="shareShoppingList">
+                            <i class="fas fa-share me-1"></i>Share
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div id="shoppingListContent">
+                        <!-- Shopping list categories will be inserted here -->
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="shopping-stats">
+                                <small class="text-muted">
+                                    <strong>Total Items: <span id="totalItems">0</span></strong> |
+                                    <strong>Estimated Cost: <span id="estimatedCost">$0</span></strong>
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <div class="progress-container">
+                                <small class="text-muted">Shopping Progress:</small>
+                                <div class="progress mt-1" style="height: 6px;">
+                                    <div class="progress-bar bg-success" id="shoppingProgress" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Smart Suggestions -->
+            <div class="smart-suggestions card shadow-sm border-0 mb-4">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        Smart Suggestions
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div id="smartSuggestions">
+                        <!-- AI suggestions will be displayed here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Store Locator -->
+            <div class="store-locator card shadow-sm border-0">
+                <div class="card-header bg-warning text-dark">
+                    <h6 class="mb-0">
+                        <i class="fas fa-store me-2"></i>
+                        Find Nearby Stores
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-outline-primary btn-sm w-100 mb-2" id="findGroceryStores">
+                        <i class="fas fa-map-marker-alt me-1"></i>
+                        Find Grocery Stores
+                    </button>
+                    <div id="nearbyStores" class="mt-3">
+                        <!-- Nearby stores will be listed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Saved Shopping Lists -->
+    <div id="savedShoppingLists" class="row mt-5" style="display: none;">
+        <div class="col-12">
+            <div class="saved-lists card shadow border-0">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history me-2"></i>
+                        My Shopping Lists
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="savedListsContent">
+                        <!-- Saved shopping lists will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Manual Recipe Entry Modal -->
+<div class="modal fade" id="manualRecipeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-plus me-2"></i>
+                    Add Recipe Manually
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="manualRecipeForm">
+                    <div class="mb-3">
+                        <label for="manualRecipeTitle" class="form-label">Recipe Name</label>
+                        <input type="text" class="form-control" id="manualRecipeTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="manualRecipeIngredients" class="form-label">Ingredients</label>
+                        <textarea 
+                            class="form-control" 
+                            id="manualRecipeIngredients" 
+                            rows="4" 
+                            placeholder="List ingredients separated by commas or new lines..."
+                            required
+                        ></textarea>
+                        <div class="form-text">
+                            Example: 2 chicken breasts, 1 cup rice, 2 tbsp olive oil, salt, pepper
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="manualRecipeServings" class="form-label">Servings</label>
+                            <input type="number" class="form-control" id="manualRecipeServings" value="4" min="1">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="manualRecipeCookTime" class="form-label">Cook Time (min)</label>
+                            <input type="number" class="form-control" id="manualRecipeCookTime" value="30" min="1">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="manualRecipeForm" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>Add Recipe
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS -->
+<style>
+.shopping-category {
+    margin-bottom: 1.5rem;
+}
+
+.category-header {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-left: 4px solid #007bff;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: between;
+}
+
+.category-items {
+    padding-left: 1rem;
+}
+
+.shopping-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f1f3f4;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.shopping-item:hover {
+    background-color: #f8f9fa;
+    padding-left: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.shopping-item:last-child {
+    border-bottom: none;
+}
+
+.shopping-item.completed {
+    text-decoration: line-through;
+    color: #6c757d;
+    background-color: #f8f9fa;
+}
+
+.shopping-item .form-check-input {
+    margin-right: 0.75rem;
+}
+
+.shopping-item .item-text {
+    flex-grow: 1;
+}
+
+.shopping-item .item-actions {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.shopping-item:hover .item-actions {
+    opacity: 1;
+}
+
+.recipe-card-small {
+    transition: all 0.3s ease;
+}
+
+.recipe-card-small:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.selected-recipe-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #28a745;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+}
+
+.manual-recipe-entry {
+    border: 2px dashed #dee2e6;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    background-color: #f8f9fa;
+}
+
+.store-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.store-item:last-child {
+    border-bottom: none;
+}
+
+@media (max-width: 768px) {
+    .shopping-actions {
+        justify-content: center !important;
+    }
+    
+    .list-actions .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+class ShoppingListManager {
+    constructor() {
+        this.selectedRecipes = [];
+        this.currentShoppingList = null;
+        this.init();
+    }
+
+    init() {
+        this.setupEventListeners();
+        this.loadSavedRecipes();
+    }
+
+    setupEventListeners() {
+        try {
+            // Add manual recipe button
+            const addManualRecipeBtn = document.getElementById('addManualRecipe');
+            if (addManualRecipeBtn) {
+                addManualRecipeBtn.addEventListener('click', () => {
+                    try {
+                        const modalElement = document.getElementById('manualRecipeModal');
+                        if (modalElement) {
+                            const modal = new bootstrap.Modal(modalElement);
+                            modal.show();
+                        } else {
+                            console.error('Modal element not found');
+                        }
+                    } catch (error) {
+                        console.error('Error showing modal:', error);
+                    }
+                });
+            }
+
+            // Manual recipe form
+            const manualRecipeForm = document.getElementById('manualRecipeForm');
+            if (manualRecipeForm) {
+                manualRecipeForm.addEventListener('submit', this.addManualRecipe.bind(this));
+            }
+
+            // Generate shopping list button
+            const generateBtn = document.getElementById('generateShoppingList');
+            if (generateBtn) {
+                // Store a reference to this for the event handler
+                const self = this;
+                generateBtn.addEventListener('click', function() {
+                    self.generateShoppingList();
+                });
+            }
+
+            // Other action buttons
+            const loadSavedListsBtn = document.getElementById('loadSavedLists');
+            if (loadSavedListsBtn) {
+                loadSavedListsBtn.addEventListener('click', this.loadSavedLists.bind(this));
+            }
+            
+            const createNewListBtn = document.getElementById('createNewList');
+            if (createNewListBtn) {
+                createNewListBtn.addEventListener('click', this.createNewList.bind(this));
+            }
+            
+            const printShoppingListBtn = document.getElementById('printShoppingList');
+            if (printShoppingListBtn) {
+                printShoppingListBtn.addEventListener('click', this.printShoppingList.bind(this));
+            }
+            
+            const exportPDFBtn = document.getElementById('exportPDF');
+            if (exportPDFBtn) {
+                exportPDFBtn.addEventListener('click', this.exportPDF.bind(this));
+            }
+            
+            const shareShoppingListBtn = document.getElementById('shareShoppingList');
+            if (shareShoppingListBtn) {
+                shareShoppingListBtn.addEventListener('click', this.shareShoppingList.bind(this));
+            }
+            
+            const findGroceryStoresBtn = document.getElementById('findGroceryStores');
+            if (findGroceryStoresBtn) {
+                findGroceryStoresBtn.addEventListener('click', this.findNearbyStores.bind(this));
+            }
+        } catch (error) {
+            console.error('Error setting up event listeners:', error);
+        }
+    }
+
+    addManualRecipe(e) {
+        e.preventDefault();
+        
+        const title = document.getElementById('manualRecipeTitle').value.trim();
+        const ingredients = document.getElementById('manualRecipeIngredients').value.trim();
+        const servings = document.getElementById('manualRecipeServings').value;
+        const cookTime = document.getElementById('manualRecipeCookTime').value;
+
+        if (!title || !ingredients) {
+            RecipeApp.showAlert('Please fill in all required fields', 'warning');
+            return;
+        }
+
+        const recipe = {
+            id: 'manual_' + Date.now(),
+            title: title,
+            ingredients: ingredients.split(/[,\n]/).map(ing => ing.trim()).filter(ing => ing),
+            servings: parseInt(servings),
+            cooking_time: parseInt(cookTime),
+            source: 'manual'
+        };
+
+        this.selectedRecipes.push(recipe);
+        this.updateSelectedRecipesDisplay();
+        this.updateGenerateButton();
+
+        // Close modal and reset form
+        const modal = bootstrap.Modal.getInstance(document.getElementById('manualRecipeModal'));
+        modal.hide();
+        document.getElementById('manualRecipeForm').reset();
+
+        RecipeApp.showAlert(`Added "${title}" to your recipe list`, 'success');
+    }
+
+    updateSelectedRecipesDisplay() {
+        const container = document.getElementById('selectedRecipesList');
+        const countSpan = document.getElementById('selectedCount');
+        
+        countSpan.textContent = this.selectedRecipes.length;
+        
+        container.innerHTML = this.selectedRecipes.map((recipe, index) => `
+            <div class="col-md-6 col-lg-4">
+                <div class="card recipe-card-small h-100 position-relative">
+                    <div class="card-body p-3">
+                        <h6 class="card-title mb-2">${recipe.title}</h6>
+                        <div class="recipe-meta mb-2">
+                            <small class="text-muted">
+                                <i class="fas fa-users me-1"></i>${recipe.servings || 4} servings
+                                ${recipe.cooking_time ? `<i class="fas fa-clock ms-2 me-1"></i>${recipe.cooking_time} min` : ''}
+                            </small>
+                        </div>
+                        <div class="recipe-ingredients">
+                            <small class="text-muted">
+                                ${recipe.ingredients.slice(0, 3).join(', ')}
+                                ${recipe.ingredients.length > 3 ? '...' : ''}
+                            </small>
+                        </div>
+                        <button class="btn btn-sm btn-outline-danger mt-2" onclick="shoppingListManager.removeRecipe(${index})">
+                            <i class="fas fa-times me-1"></i>Remove
+                        </button>
+                    </div>
+                    <div class="selected-recipe-badge">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    removeRecipe(index) {
+        this.selectedRecipes.splice(index, 1);
+        this.updateSelectedRecipesDisplay();
+        this.updateGenerateButton();
+    }
+
+    updateGenerateButton() {
+        const button = document.getElementById('generateShoppingList');
+        button.disabled = this.selectedRecipes.length === 0;
+        
+        if (this.selectedRecipes.length > 0) {
+            button.innerHTML = `
+                <i class="fas fa-magic me-2"></i>
+                Generate Smart Shopping List (${this.selectedRecipes.length} recipes)
+            `;
+        } else {
+            button.innerHTML = `
+                <i class="fas fa-magic me-2"></i>
+                Generate Smart Shopping List
+            `;
+        }
+    }
+
+    async generateShoppingList() {
+        // Store a reference to 'this' at the beginning of the method
+        const self = this;
+        
+        if (self.selectedRecipes.length === 0) {
+            RecipeApp.showAlert('Please select at least one recipe', 'warning');
+            return;
+        }
+
+        try {
+            RecipeApp.showLoading('Generating your smart shopping list...', 'AI is organizing ingredients by category');
+
+            const recipes = self.selectedRecipes.map(recipe => 
+                `${recipe.title}\nIngredients: ${recipe.ingredients.join(', ')}`
+            );
+
+            const response = await fetch('/ai/shopping-list', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(RecipeApp.authToken() ? { 'Authorization': `Bearer ${RecipeApp.authToken()}` } : {})
+                },
+                body: JSON.stringify({
+                    recipes: recipes,
+                    name: `Shopping List - ${new Date().toLocaleDateString()}`
+                })
+            });
+
+            const data = await response.json();
+            RecipeApp.hideLoading();
+
+            if (data.success) {
+                self.currentShoppingList = data.shopping_list;
+                console.log('Shopping list data received:', data.shopping_list);
+                
+                // Ensure shopping list has the expected structure
+                if (!data.shopping_list || !data.shopping_list.categories) {
+                    console.error('Invalid shopping list data structure', data.shopping_list);
+                    RecipeApp.showAlert('Invalid shopping list data. Please try again.', 'error');
+                    return;
+                }
+                
+                // Call methods using the self reference to maintain context
+                if (typeof self.displayShoppingList === 'function') {
+                    self.displayShoppingList(data.shopping_list);
+                } else {
+                    console.error('displayShoppingList is not a function', self);
+                    RecipeApp.showAlert('Error displaying shopping list. Please refresh the page and try again.', 'error');
+                }
+                
+                if (typeof self.generateSmartSuggestions === 'function') {
+                    self.generateSmartSuggestions();
+                }
+            } else {
+                RecipeApp.showAlert('Failed to generate shopping list', 'error');
+            }
+        } catch (error) {
+            RecipeApp.hideLoading();
+            console.error('Shopping list generation error:', error);
+            RecipeApp.showAlert('Network error. Please try again.', 'error');
+        }
+    }
+
+    displayShoppingList(shoppingList) {
+        // Store a reference to 'this' at the beginning of the method
+        const self = this;
+        
+        try {
+            console.log('Displaying shopping list:', shoppingList);
+            
+            const resultsSection = document.getElementById('shoppingListResults');
+            if (!resultsSection) {
+                console.error('Results section not found');
+                return;
+            }
+            
+            const contentDiv = document.getElementById('shoppingListContent');
+            if (!contentDiv) {
+                console.error('Content div not found');
+                return;
+            }
+            
+            const totalItemsSpan = document.getElementById('totalItems');
+            const estimatedCostSpan = document.getElementById('estimatedCost');
+
+            // Update stats
+            if (totalItemsSpan) totalItemsSpan.textContent = shoppingList.total_items || 0;
+            if (estimatedCostSpan) estimatedCostSpan.textContent = shoppingList.estimated_cost || '$0';
+
+            // Generate shopping list HTML
+            const categoriesHTML = Object.entries(shoppingList.categories || {}).map(([category, items]) => `
+                <div class="shopping-category">
+                    <div class="category-header">
+                        <div class="category-info">
+                            <i class="fas fa-${self.getCategoryIcon(category)} me-2"></i>
+                            <strong>${category}</strong>
+                            <span class="badge bg-primary ms-2">${items.length}</span>
+                        </div>
+                        <div class="category-actions">
+                            <button class="btn btn-sm btn-outline-primary" onclick="shoppingListManager.selectAllInCategory('${category}')">
+                                Select All
+                            </button>
+                        </div>
+                    </div>
+                    <div class="category-items">
+                    ${items.map((item, index) => `
+                        <div class="shopping-item" data-category="${category}" data-index="${index}">
+                            <div class="form-check">
+                                <input 
+                                    class="form-check-input shopping-item-checkbox" 
+                                    type="checkbox" 
+                                    id="item_${category}_${index}"
+                                    onchange="shoppingListManager.updateProgress()"
+                                >
+                                <label class="form-check-label item-text" for="item_${category}_${index}">
+                                    ${item}
+                                </label>
+                            </div>
+                            <div class="item-actions">
+                                <button class="btn btn-sm btn-outline-secondary me-1" onclick="shoppingListManager.editItem('${category}', ${index})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="shoppingListManager.removeItem('${category}', ${index})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
+
+        // Update the DOM with the generated HTML
+        contentDiv.innerHTML = categoriesHTML;
+        resultsSection.style.display = 'block';
+        resultsSection.scrollIntoView({ behavior: 'smooth' });
+        console.log('Shopping list displayed successfully');
+        } catch (error) {
+            console.error('Error displaying shopping list:', error);
+            RecipeApp.showAlert('Error displaying shopping list. Please try again.', 'error');
+        }
+    }
+
+    getCategoryIcon(category) {
+        // Map categories to appropriate Font Awesome icons
+        const icons = {
+            'Produce': 'apple-alt',
+            'Meat & Seafood': 'drumstick-bite',
+            'Dairy': 'cheese',
+            'Pantry': 'boxes',
+            'Spices & Seasonings': 'pepper-hot',
+            'Bakery': 'bread-slice',
+            'Frozen': 'snowflake',
+            'Beverages': 'glass-water',
+            'Snacks': 'cookie-bite',
+            'Canned Goods': 'can-food',
+            'Dry Goods': 'box',
+            'Baking': 'cookie-bite',
+            'Household': 'home',
+            'Other': 'shopping-basket'
+        };
+        console.log('Getting icon for category:', category, 'Result:', icons[category] || 'shopping-basket');
+        return icons[category] || 'shopping-basket';
+    }
+
+    updateProgress() {
+        const checkboxes = document.querySelectorAll('.shopping-item-checkbox');
+        const checked = document.querySelectorAll('.shopping-item-checkbox:checked');
+        const progress = (checked.length / checkboxes.length) * 100;
+        
+        document.getElementById('shoppingProgress').style.width = progress + '%';
+        
+        // Update item styling
+        checkboxes.forEach(checkbox => {
+            const shoppingItem = checkbox.closest('.shopping-item');
+            if (checkbox.checked) {
+                shoppingItem.classList.add('completed');
+            } else {
+                shoppingItem.classList.remove('completed');
+            }
+        });
+    }
+
+    selectAllInCategory(category) {
+        const categoryCheckboxes = document.querySelectorAll(`[data-category="${category}"] .shopping-item-checkbox`);
+        const allChecked = Array.from(categoryCheckboxes).every(cb => cb.checked);
+        
+        categoryCheckboxes.forEach(checkbox => {
+            checkbox.checked = !allChecked;
+        });
+        
+        this.updateProgress();
+    }
+
+    generateSmartSuggestions() {
+        // Store a reference to 'this' at the beginning of the method
+        const self = this;
+        
+        // Use a try-catch block to handle potential errors
+        try {
+            const suggestions = [
+                {
+                    type: 'bulk-savings',
+                    icon: 'piggy-bank',
+                    title: 'Bulk Savings Available',
+                    description: 'Rice and pasta are cheaper in larger quantities',
+                    color: 'success'
+                },
+                {
+                    type: 'seasonal',
+                    icon: 'leaf',
+                    title: 'Seasonal Produce',
+                    description: 'Tomatoes and peppers are in season - great prices!',
+                    color: 'info'
+                },
+                {
+                    type: 'substitution',
+                    icon: 'exchange-alt',
+                    title: 'Money-Saving Substitute',
+                    description: 'Consider chicken thighs instead of breasts for better value',
+                    color: 'warning'
+                }
+            ];
+
+            const suggestionsHTML = suggestions.map(suggestion => `
+                <div class="suggestion-item mb-2">
+                    <div class="card border-${suggestion.color}">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-${suggestion.icon} text-${suggestion.color} me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">${suggestion.title}</h6>
+                                    <small class="text-muted">${suggestion.description}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            const smartSuggestionsElement = document.getElementById('smartSuggestions');
+            if (smartSuggestionsElement) {
+                smartSuggestionsElement.innerHTML = suggestionsHTML;
+            } else {
+                console.error('Smart suggestions element not found');
+            }
+        } catch (error) {
+            console.error('Error generating smart suggestions:', error);
+        }
+    }
+
+    async findNearbyStores() {
+        // Mock implementation - in production, integrate with Google Places API
+        const mockStores = [
+            { name: 'Whole Foods Market', distance: '0.8 miles', rating: 4.5 },
+            { name: 'Safeway', distance: '1.2 miles', rating: 4.2 },
+            { name: 'Target Grocery', distance: '1.5 miles', rating: 4.3 }
+        ];
+
+        const storesHTML = mockStores.map(store => `
+            <div class="store-item">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-0">${store.name}</h6>
+                        <small class="text-muted">${store.distance}</small>
+                    </div>
+                    <div class="text-end">
+                        <div class="rating">
+                            ${Array(Math.floor(store.rating)).fill().map(() => '<i class="fas fa-star text-warning"></i>').join('')}
+                        </div>
+                        <small class="text-muted">${store.rating}</small>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        document.getElementById('nearbyStores').innerHTML = storesHTML;
+    }
+
+    printShoppingList() {
+        if (!this.currentShoppingList) return;
+
+        const printContent = this.generatePrintableList();
+        const printWindow = window.open('', '_blank');
+        
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>Shopping List</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        .header { border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 20px; }
+                        .category { margin-bottom: 20px; }
+                        .category-header { background: #f8f9fa; padding: 10px; font-weight: bold; }
+                        .item { margin: 5px 0; padding: 5px; }
+                        .checkbox { margin-right: 10px; }
+                        @media print { body { font-size: 12pt; } }
+                    </style>
+                </head>
+                <body>
+                    ${printContent}
+                </body>
+            </html>
+        `);
+        
+        printWindow.document.close();
+        printWindow.print();
+    }
+
+    generatePrintableList() {
+        const date = new Date().toLocaleDateString();
+        return `
+            <div class="header">
+                <h1>Shopping List</h1>
+                <p>Generated on: ${date}</p>
+                <p>Total Items: ${this.currentShoppingList.total_items}</p>
+            </div>
+            ${Object.entries(this.currentShoppingList.categories).map(([category, items]) => `
+                <div class="category">
+                    <div class="category-header">${category} (${items.length} items)</div>
+                    ${items.map(item => `
+                        <div class="item">
+                            <input type="checkbox" class="checkbox">
+                            ${item}
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('')}
+        `;
+    }
+
+    exportPDF() {
+        if (!this.currentShoppingList) return;
+        
+        // Show loading indicator
+        RecipeApp.showAlert('Generating PDF...', 'info');
+        
+        // Prepare data for the request
+        const data = {
+            shopping_list: this.currentShoppingList,
+            name: this.currentShoppingList.name || 'Shopping List'
+        };
+        
+        // Make POST request to the PDF export endpoint
+        fetch('/ai/shopping-list/export-pdf', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/pdf'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to generate PDF');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            // Create a URL for the blob
+            const url = window.URL.createObjectURL(blob);
+            
+            // Create a temporary link and trigger download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${data.name}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            
+            // Clean up
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            RecipeApp.showAlert('PDF downloaded successfully!', 'success');
+        })
+        .catch(error => {
+            console.error('PDF export error:', error);
+            RecipeApp.showAlert('Failed to generate PDF. Please try again.', 'error');
+        });
+    }
+
+    shareShoppingList() {
+        if (!this.currentShoppingList) return;
+
+        const listText = Object.entries(this.currentShoppingList.categories)
+            .map(([category, items]) => `${category}:\n${items.map(item => `• ${item}`).join('\n')}`)
+            .join('\n\n');
+
+        if (navigator.share) {
+            navigator.share({
+                title: 'My Shopping List',
+                text: listText,
+                url: window.location.href
+            });
+        } else {
+            navigator.clipboard.writeText(listText).then(() => {
+                RecipeApp.showAlert('Shopping list copied to clipboard!', 'success');
+            });
+        }
+    }
+
+    loadSavedRecipes() {
+        // Mock implementation - load user's saved recipes
+        console.log('Loading saved recipes...');
+    }
+
+    loadSavedLists() {
+        // Mock implementation - show saved shopping lists
+        const savedSection = document.getElementById('savedShoppingLists');
+        savedSection.style.display = savedSection.style.display === 'none' ? 'block' : 'none';
+    }
+
+    createNewList() {
+        // Reset current state
+        this.selectedRecipes = [];
+        this.currentShoppingList = null;
+        
+        this.updateSelectedRecipesDisplay();
+        this.updateGenerateButton();
+        
+        // Hide results
+        document.getElementById('shoppingListResults').style.display = 'none';
+        document.getElementById('savedShoppingLists').style.display = 'none';
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        RecipeApp.showAlert('Ready to create a new shopping list!', 'success');
+    }
+
+    editItem(category, index) {
+        RecipeApp.showAlert('Item editing coming soon!', 'info');
+    }
+
+    removeItem(category, index) {
+        RecipeApp.showAlert('Item removal coming soon!', 'info');
+    }
+    
+    getCategoryIcon(category) {
+        // Map categories to appropriate Font Awesome icons
+        const categoryIcons = {
+            'Produce': 'carrot',
+            'Dairy': 'cheese',
+            'Meat': 'drumstick-bite',
+            'Seafood': 'fish',
+            'Bakery': 'bread-slice',
+            'Canned Goods': 'can-food',
+            'Dry Goods': 'box',
+            'Frozen Foods': 'snowflake',
+            'Beverages': 'wine-bottle',
+            'Snacks': 'cookie',
+            'Condiments': 'pepper-hot',
+            'Spices': 'mortar-pestle',
+            'Baking': 'cookie-bite',
+            'Household': 'home',
+            'Other': 'shopping-basket'
+        };
+        
+        // Return the icon name or a default icon if category not found
+        return categoryIcons[category] || 'shopping-basket';
+    }
+}
+
+// Initialize shopping list manager
+let shoppingListManager;
+
+// Ensure the DOM is fully loaded before initializing
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            shoppingListManager = new ShoppingListManager();
+        } catch (error) {
+            console.error('Error initializing ShoppingListManager:', error);
+        }
+    });
+} else {
+    // DOM already loaded, initialize immediately
+    try {
+        shoppingListManager = new ShoppingListManager();
+    } catch (error) {
+        console.error('Error initializing ShoppingListManager:', error);
+    }
+}
+</script>
+{% endblock %}

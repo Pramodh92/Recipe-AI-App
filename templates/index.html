@@ -1,0 +1,547 @@
+{% extends "base.html" %}
+
+{% block title %}AI Recipe & Culinary Encyclopedia - Home{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+   <!-- Hero Section -->
+<section class="hero-section text-white py-5">
+
+    <div class="container">
+        <div class="row align-items-center min-vh-50">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1 class="text-warning">
+                    Your AI-Powered <br>
+                    <span class="text-warning">Culinary Companion</span>
+                </h1>
+
+                <!-- Transparent Container -->
+                <div class="transparent-box p-3 rounded-3 shadow-sm mb-4">
+                    <p class="text-warning">
+                        Discover amazing recipes, learn cooking techniques, and plan your meals 
+                        with the power of artificial intelligence.
+                    </p>
+                </div>
+
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{{ url_for('recipes.generator_page') }}" class="btn btn-warning btn-lg">
+                        <i class="fas fa-magic me-2"></i>Generate Recipe
+                    </a>
+                    <a href="{{ url_for('ai_services.encyclopedia_page') }}" class="btn btn-warning btn-lg">
+                        <i class="fas fa-book me-2"></i>Explore Encyclopedia
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- Features Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="display-5 fw-bold mb-3">Powerful AI Features</h2>
+                    <p class="lead text-muted">
+                        Experience the future of cooking with our advanced AI-powered tools
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                <i class="fas fa-robot fa-2x"></i>
+                            </div>
+                            <h5 class="card-title">AI Recipe Generation</h5>
+                            <p class="card-text text-muted">
+                                Create unique recipes based on your ingredients and preferences using advanced AI models.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                <i class="fas fa-book-open fa-2x"></i>
+                            </div>
+                            <h5 class="card-title">Culinary Encyclopedia</h5>
+                            <p class="card-text text-muted">
+                                Learn cooking techniques, food science, and culinary terms with AI-powered explanations.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                <i class="fas fa-exchange-alt fa-2x"></i>
+                            </div>
+                            <h5 class="card-title">Smart Substitutions</h5>
+                            <p class="card-text text-muted">
+                                Get intelligent ingredient substitutions with detailed reasoning and impact analysis.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                <i class="fas fa-calendar-alt fa-2x"></i>
+                            </div>
+                            <h5 class="card-title">Meal Planning</h5>
+                            <p class="card-text text-muted">
+                                Plan your weekly meals and generate smart shopping lists automatically.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trending Recipes Section -->
+     <section class="py-5">
+            <div class="container">
+                <div class="row text-center mb-5">
+                    <div class="col-lg-8 mx-auto">
+                        <h2 class="display-5 fw-bold mb-3">Explore World Cuisines</h2>
+                        <p class="lead text-muted">
+                            Discover delicious recipes from around the globe with AI-powered recommendations
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="row g-4">
+                    <!-- Italian Cuisine -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="cuisine-card card shadow-sm h-100">
+                            <div class="cuisine-image">
+                                <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                     alt="Italian Cuisine" class="cuisine-img">
+                            </div>
+                            <div class="card-body text-center">
+                                <h5 class="card-title fw-bold">Italian Cuisine</h5>
+                                <p class="card-text text-muted mb-3">
+                                    Rich flavors with pasta, pizza, risotto, and authentic Italian herbs
+                                </p>
+                                <button class="btn btn-outline-primary btn-sm" onclick="exploreCuisine('italian')">
+                                    <i class="fas fa-search me-2"></i>Explore Recipes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chinese Cuisine -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="cuisine-card card shadow-sm h-100">
+                            <div class="cuisine-image">
+                                <img src="https://images.unsplash.com/photo-1748248078354-5b085351714f?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                                     alt="Chinese Cuisine" class="cuisine-img">
+                            </div>
+                            <div class="card-body text-center">
+                                <h5 class="card-title fw-bold">Chinese Cuisine</h5>
+                                <p class="card-text text-muted mb-3">
+                                    Bold flavors with stir-fries, dim sum, noodles, and traditional spices
+                                </p>
+                                <button class="btn btn-outline-primary btn-sm" onclick="exploreCuisine('chinese')">
+                                    <i class="fas fa-search me-2"></i>Explore Recipes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Indian Cuisine -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="cuisine-card card shadow-sm h-100">
+                            <div class="cuisine-image">
+                                <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                     alt="Indian Cuisine" class="cuisine-img">
+                            </div>
+                            <div class="card-body text-center">
+                                <h5 class="card-title fw-bold">Indian Cuisine</h5>
+                                <p class="card-text text-muted mb-3">
+                                    Aromatic curries, biryanis, and dishes with exotic spices and herbs
+                                </p>
+                                <button class="btn btn-outline-primary btn-sm" onclick="exploreCuisine('indian')">
+                                    <i class="fas fa-search me-2"></i>Explore Recipes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mexican Cuisine -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="cuisine-card card shadow-sm h-100">
+                            <div class="cuisine-image">
+                                <img src="https://images.unsplash.com/photo-1640983743761-4f0e0204bc58?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                                     alt="Mexican Cuisine" class="cuisine-img">
+                            </div>
+                            <div class="card-body text-center">
+                                <h5 class="card-title fw-bold">Mexican Cuisine</h5>
+                                <p class="card-text text-muted mb-3">
+                                    Vibrant tacos, burritos, quesadillas with fresh peppers and lime
+                                </p>
+                                <button class="btn btn-outline-primary btn-sm" onclick="exploreCuisine('mexican')">
+                                    <i class="fas fa-search me-2"></i>Explore Recipes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Japanese Cuisine -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="cuisine-card card shadow-sm h-100">
+                            <div class="cuisine-image">
+                                <img src="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                     alt="Japanese Cuisine" class="cuisine-img">
+                                
+                            </div>
+                            <div class="card-body text-center">
+                                <h5 class="card-title fw-bold">Japanese Cuisine</h5>
+                                <p class="card-text text-muted mb-3">
+                                    Fresh sushi, ramen, tempura with delicate flavors and presentation
+                                </p>
+                                <button class="btn btn-outline-primary btn-sm" onclick="exploreCuisine('japanese')">
+                                    <i class="fas fa-search me-2"></i>Explore Recipes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- French Cuisine -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="cuisine-card card shadow-sm h-100">
+                            <div class="cuisine-image">
+                                <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                     alt="French Cuisine" class="cuisine-img">
+                                
+                            </div>
+                            <div class="card-body text-center">
+                                <h5 class="card-title fw-bold">French Cuisine</h5>
+                                <p class="card-text text-muted mb-3">
+                                    Elegant pastries, soups, and sophisticated fine dining classics
+                                </p>
+                                <button class="btn btn-outline-primary btn-sm" onclick="exploreCuisine('french')">
+                                    <i class="fas fa-search me-2"></i>Explore Recipes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thai Cuisine -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="cuisine-card card shadow-sm h-100">
+                            <div class="cuisine-image">
+                                <img src="https://images.unsplash.com/photo-1675150277436-9c7348972c11?q=80&w=2064&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                                     alt="Thai Cuisine" class="cuisine-img">
+                                
+                            </div>
+                            <div class="card-body text-center">
+                                <h5 class="card-title fw-bold">Thai Cuisine</h5>
+                                <p class="card-text text-muted mb-3">
+                                    Spicy curries, pad thai, and dishes with coconut and lemongrass
+                                </p>
+                                <button class="btn btn-outline-primary btn-sm" onclick="exploreCuisine('thai')">
+                                    <i class="fas fa-search me-2"></i>Explore Recipes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mediterranean Cuisine -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="cuisine-card card shadow-sm h-100">
+                            <div class="cuisine-image">
+                                <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                     alt="Mediterranean Cuisine" class="cuisine-img">
+                                
+                            </div>
+                            <div class="card-body text-center">
+                                <h5 class="card-title fw-bold">Mediterranean Cuisine</h5>
+                                <p class="card-text text-muted mb-3">
+                                    Fresh salads, grilled seafood, olive oil, and healthy ingredients
+                                </p>
+                                <button class="btn btn-outline-primary btn-sm" onclick="exploreCuisine('mediterranean')">
+                                    <i class="fas fa-search me-2"></i>Explore Recipes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Korean Cuisine -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="cuisine-card card shadow-sm h-100">
+                            <div class="cuisine-image">
+                                <img src="https://images.unsplash.com/photo-1553163147-622ab57be1c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                     alt="Korean Cuisine" class="cuisine-img">
+                               
+                            </div>
+                            <div class="card-body text-center">
+                                <h5 class="card-title fw-bold">Korean Cuisine</h5>
+                                <p class="card-text text-muted mb-3">
+                                    Flavorful BBQ, kimchi, bibimbap with fermented and grilled dishes
+                                </p>
+                                <button class="btn btn-outline-primary btn-sm" onclick="exploreCuisine('korean')">
+                                    <i class="fas fa-search me-2"></i>Explore Recipes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- American Cuisine -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="cuisine-card card shadow-sm h-100">
+                            <div class="cuisine-image">
+                                <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                     alt="American Cuisine" class="cuisine-img">
+                            </div>
+                            <div class="card-body text-center">
+                                <h5 class="card-title fw-bold">American Cuisine</h5>
+                                <p class="card-text text-muted mb-3">
+                                    Classic burgers, BBQ ribs, mac and cheese, and comfort food favorites
+                                </p>
+                                <button class="btn btn-outline-primary btn-sm" onclick="exploreCuisine('american')">
+                                    <i class="fas fa-search me-2"></i>Explore Recipes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-5">
+                    <button class="btn btn-primary btn-lg">
+                        <i class="fas fa-globe me-2"></i>Explore All Cuisines
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+              
+
+<!-- Recipe Modal -->
+<div class="modal fade" id="recipeModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="recipeModalTitle">Recipe Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="recipeModalBody">
+                <!-- Recipe content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveRecipeBtn">
+                    <i class="fas fa-heart me-1"></i>Save Recipe
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Counter animation
+function animateCounters() {
+    const counters = document.querySelectorAll('[data-counter]');
+    
+    counters.forEach(counter => {
+        const target = parseInt(counter.getAttribute('data-counter'));
+        const increment = target / 100;
+        let current = 0;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            counter.textContent = Math.floor(current).toLocaleString();
+            
+            if (current >= target) {
+                counter.textContent = target.toLocaleString();
+                clearInterval(timer);
+            }
+        }, 20);
+    });
+}
+
+// Recipe functions
+async function viewRecipe(recipeId) {
+    try {
+        showLoading('Loading recipe details...');
+        
+        const response = await fetch(`/api/recipes/${recipeId}`);
+        const data = await response.json();
+        
+        hideLoading();
+        
+        if (data.success) {
+            displayRecipeModal(data.recipe);
+        } else {
+            showAlert('Error loading recipe', 'error');
+        }
+    } catch (error) {
+        hideLoading();
+        showAlert('Error loading recipe', 'error');
+    }
+}
+
+function displayRecipeModal(recipe) {
+    document.getElementById('recipeModalTitle').textContent = recipe.title;
+    
+    const modalBody = document.getElementById('recipeModalBody');
+    modalBody.innerHTML = `
+        <div class="recipe-details">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Cuisine:</strong> ${recipe.cuisine || 'Global'}
+                </div>
+                <div class="col-md-6">
+                    <strong>Cooking Time:</strong> ${recipe.cooking_time || 30} minutes
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Difficulty:</strong> ${recipe.difficulty || 'Medium'}
+                </div>
+                <div class="col-md-6">
+                    <strong>Servings:</strong> ${recipe.servings || 4}
+                </div>
+            </div>
+            
+            <h6>Ingredients:</h6>
+            <ul class="list-group list-group-flush mb-3">
+                ${recipe.ingredients.map(ingredient => `<li class="list-group-item">${ingredient}</li>`).join('')}
+            </ul>
+            
+            <h6>Instructions:</h6>
+            <ol class="list-group list-group-numbered">
+                ${recipe.instructions.map(instruction => `<li class="list-group-item">${instruction}</li>`).join('')}
+            </ol>
+        </div>
+    `;
+    
+    document.getElementById('saveRecipeBtn').onclick = () => saveRecipe(recipe.id);
+    
+    new bootstrap.Modal(document.getElementById('recipeModal')).show();
+}
+
+// Cuisine exploration function
+function exploreCuisine(cuisine) {
+    // Redirect to recipe generator with pre-selected cuisine
+    window.location.href = `{{ url_for('recipes.generator_page') }}?cuisine=${cuisine}`;
+}
+
+// Cuisine card hover effects
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate counters when they come into view
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounters();
+                observer.disconnect();
+            }
+        });
+    });
+    
+    const statsSection = document.querySelector('.stat-item');
+    if (statsSection) {
+        observer.observe(statsSection);
+    }
+
+    // Add hover effects to cuisine cards
+    const cuisineCards = document.querySelectorAll('.cuisine-card');
+    cuisineCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px)';
+            this.style.transition = 'transform 0.3s ease';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+});
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.cuisine-img {
+    height: 250px;
+    width: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.cuisine-card .card-body {
+    background: white;
+}
+
+.cuisine-card .card-title {
+    color: #333;
+    font-size: 1.25rem;
+}
+
+.cuisine-card .card-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.cuisine-overlay {
+    background: linear-gradient(45deg, rgba(0,0,0,0.7), rgba(0,0,0,0.4));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.cuisine-card:hover .cuisine-overlay {
+    opacity: 1;
+}
+
+.cuisine-card:hover .cuisine-img {
+    transform: scale(1.1);
+}
+
+.cuisine-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 15px;
+}
+
+.cuisine-card:hover {
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.hero-section {
+    position: relative;
+    min-height: 80vh;
+    background-image: url("{{ url_for('static', filename='images/hero-food-background.jpg') }}");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+
+
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+@media (max-width: 768px) {
+    .cuisine-img {
+        height: 150px;
+    }
+}
+</style>
+{% endblock %}
