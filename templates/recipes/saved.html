@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}My Saved Recipes - AI Recipe Hub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-lg-8">
+            <h1 class="display-5 fw-bold mb-3">My Saved Recipes</h1>
+            <p class="lead text-muted">Your personal collection of favorite recipes</p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+            <a href="{{ url_for('recipes.generator_page') }}" class="btn btn-primary">
+                <i class="fas fa-magic me-2"></i>Generate New Recipe
+            </a>
+        </div>
+    </div>
+    
+    {% if recipes and recipes|length > 0 %}
+    <div class="row g-4">
+        {% for recipe in recipes %}
+        <div class="col-md-6 col-lg-4">
+            <div class="recipe-card card h-100 border-0 shadow-sm">
+                <div class="recipe-image-placeholder bg-gradient-primary d-flex align-items-center justify-content-center" style="height: 180px;">
+                    <i class="fas fa-utensils fa-3x text-white opacity-50"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ recipe.title }}</h5>
+                    <div class="recipe-meta d-flex align-items-center mb-2">
+                        <span class="badge bg-primary me-2">{{ recipe.cuisine or 'Global' }}</span>
+                        <small class="text-muted">
+                            <i class="fas fa-clock me-1"></i>{{ recipe.cooking_time or 30 }} min
+                        </small>
+                    </div>
+                    <div class="ingredients-preview">
+                        <small class="text-muted">
+                            {% for ingredient in recipe.ingredients[:3] %}
+                                {{ ingredient }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                            {% if recipe.ingredients|length > 3 %}...{% endif %}
+                        </small>
+                    </div>
+                    <div class="rating mt-2">
+                        {% for i in range(5) %}
+                            <i class="fas fa-star{% if i >= recipe.average_rating %} text-muted{% else %} text-warning{% endif %}"></i>
+                        {% endfor %}
+                        <small class="text-muted ms-1">({{ recipe.average_rating|round(1) }})</small>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <button class="btn btn-outline-primary btn-sm me-2" onclick="viewRecipe('{{ recipe.id }}');">
+                        <i class="fas fa-eye me-1"></i>View
+                    </button>
+                    <button class="btn btn-outline-danger btn-sm" onclick="unsaveRecipe('{{ recipe.id }}');">
+                        <i class="fas fa-heart-broken me-1"></i>Remove
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <div class="empty-state mb-4">
+            <i class="fas fa-heart text-muted" style="font-size: 4rem;"></i>
+        </div>
+        <h3 class="mb-3">No Saved Recipes Yet</h3>
+        <p class="text-muted mb-4">Start saving your favorite recipes to build your collection</p>
+        <a href="{{ url_for('recipes.generator_page') }}" class="btn btn-primary">
+            <i class="fas fa-magic me-2"></i>Generate a Recipe
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Recipe Modal -->
+<div class="modal fade" id="recipeModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="recipeModalTitle">Recipe Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="recipeModalBody">
+                <!-- Recipe content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="unsaveRecipeBtn">
+                    <i class="fas fa-heart-broken me-1"></i>Remove from Saved
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let currentRecipeId = null;
+
+// Recipe functions
+async function viewRecipe(recipeId) {
+    try {
+        RecipeApp.showLoading('Loading recipe details...');
+        currentRecipeId = recipeId;
+        
+        const response = await fetch(`/api/recipes/${recipeId}`, {
+            headers: {
+                'Authorization': `Bearer ${RecipeApp.authToken()}`
+            }
+        });
+        const data = await response.json();
+        
+        RecipeApp.hideLoading();
+        
+        if (data.success) {
+            displayRecipeModal(data.recipe);
+        } else {
+            RecipeApp.showAlert('Error loading recipe', 'error');
+        }
+    } catch (error) {
+        RecipeApp.hideLoading();
+        RecipeApp.showAlert('Error loading recipe', 'error');
+    }
+}
+
+function displayRecipeModal(recipe) {
+    document.getElementById('recipeModalTitle').textContent = recipe.title;
+    
+    const modalBody = document.getElementById('recipeModalBody');
+    modalBody.innerHTML = `
+        <div class="recipe-details">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Cuisine:</strong> ${recipe.cuisine || 'Global'}
+                </div>
+                <div class="col-md-6">
+                    <strong>Cooking Time:</strong> ${recipe.cooking_time || 30} minutes
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Difficulty:</strong> ${recipe.difficulty || 'Medium'}
+                </div>
+                <div class="col-md-6">
+                    <strong>Servings:</strong> ${recipe.servings || 4}
+                </div>
+            </div>
+            
+            <h6>Ingredients:</h6>
+            <ul class="list-group list-group-flush mb-3">
+                ${recipe.ingredients.map(ingredient => `<li class="list-group-item">${ingredient}</li>`).join('')}
+            </ul>
+            
+            <h6>Instructions:</h6>
+            <ol class="list-group list-group-numbered">
+                ${recipe.instructions.map(instruction => `<li class="list-group-item">${instruction}</li>`).join('')}
+            </ol>
+        </div>
+    `;
+    
+    // Initialize the modal
+    const recipeModal = new bootstrap.Modal(document.getElementById('recipeModal'));
+    recipeModal.show();
+    
+    // Set up unsave button
+    document.getElementById('unsaveRecipeBtn').onclick = () => unsaveRecipe(recipe.id, true);
+}
+
+async function unsaveRecipe(recipeId, closeModal = false) {
+    try {
+        RecipeApp.showLoading('Removing recipe...');
+        
+        const response = await fetch(`/recipes/unsave`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${RecipeApp.authToken()}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ recipe_id: recipeId })
+        });
+        
+        const data = await response.json();
+        RecipeApp.hideLoading();
+        
+        if (data.success) {
+            RecipeApp.showAlert('Recipe removed from saved recipes', 'success');
+            
+            if (closeModal) {
+                const recipeModal = bootstrap.Modal.getInstance(document.getElementById('recipeModal'));
+                recipeModal.hide();
+            }
+            
+            // Remove the recipe card from the UI
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        } else {
+            RecipeApp.showAlert(data.message || 'Failed to remove recipe', 'error');
+        }
+    } catch (error) {
+        RecipeApp.hideLoading();
+        console.error('Unsave recipe error:', error);
+        RecipeApp.showAlert('Failed to remove recipe', 'error');
+    }
+}
+</script>
+{% endblock %}

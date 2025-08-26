@@ -1,0 +1,793 @@
+    {% extends "base.html" %}
+
+{% block title %}Sign Up - AI Recipe Hub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="signup-card card shadow-lg border-0">
+                <div class="card-header bg-success text-white text-center">
+                    <h3 class="mb-0">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Create Account
+                    </h3>
+                    <p class="mb-0 mt-2">Join thousands of home cooks using AI</p>
+                </div>
+                <div class="card-body p-4">
+                    <form id="signupForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName" class="form-label">
+                                    <i class="fas fa-user me-2 text-success"></i>
+                                    First Name *
+                                </label>
+                                <input 
+                                    type="text" 
+                                    class="form-control form-control-lg" 
+                                    id="firstName" 
+                                    name="firstName" 
+                                    placeholder="John"
+                                    required
+                                    autocomplete="given-name"
+                                >
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName" class="form-label">
+                                    <i class="fas fa-user me-2 text-success"></i>
+                                    Last Name *
+                                </label>
+                                <input 
+                                    type="text" 
+                                    class="form-control form-control-lg" 
+                                    id="lastName" 
+                                    name="lastName" 
+                                    placeholder="Doe"
+                                    required
+                                    autocomplete="family-name"
+                                >
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope me-2 text-success"></i>
+                                Email Address *
+                            </label>
+                            <input 
+                                type="email" 
+                                class="form-control form-control-lg" 
+                                id="email" 
+                                name="email" 
+                                placeholder="john.doe@example.com"
+                                required
+                                autocomplete="email"
+                            >
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                We'll never share your email with anyone else.
+                            </div>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock me-2 text-success"></i>
+                                Password *
+                            </label>
+                            <div class="input-group">
+                                <input 
+                                    type="password" 
+                                    class="form-control form-control-lg" 
+                                    id="password" 
+                                    name="password" 
+                                    placeholder="Create a strong password"
+                                    required
+                                    autocomplete="new-password"
+                                >
+                                <button 
+                                    type="button" 
+                                    class="btn btn-outline-secondary" 
+                                    id="togglePassword"
+                                    aria-label="Toggle password visibility"
+                                >
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Password Strength Indicator -->
+                            <div class="password-strength mt-2">
+                                <div class="progress" style="height: 4px;">
+                                    <div class="progress-bar" id="passwordStrengthBar" role="progressbar" style="width: 0%"></div>
+                                </div>
+                                <small class="text-muted" id="passwordStrengthText">Enter a password</small>
+                            </div>
+                            
+                            <div class="password-requirements mt-2">
+                                <small class="text-muted">
+                                    Password must contain:
+                                    <ul class="mb-0 mt-1">
+                                        <li id="length-req" class="text-muted">At least 8 characters</li>
+                                        <li id="uppercase-req" class="text-muted">One uppercase letter</li>
+                                        <li id="lowercase-req" class="text-muted">One lowercase letter</li>
+                                        <li id="number-req" class="text-muted">One number</li>
+                                        <li id="special-req" class="text-muted">One special character</li>
+                                    </ul>
+                                </small>
+                            </div>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="confirmPassword" class="form-label">
+                                <i class="fas fa-lock me-2 text-success"></i>
+                                Confirm Password *
+                            </label>
+                            <input 
+                                type="password" 
+                                class="form-control form-control-lg" 
+                                id="confirmPassword" 
+                                name="confirmPassword" 
+                                placeholder="Confirm your password"
+                                required
+                                autocomplete="new-password"
+                            >
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="preferredLanguage" class="form-label">
+                                <i class="fas fa-globe me-2 text-success"></i>
+                                Preferred Language
+                            </label>
+                            <select class="form-select form-select-lg" id="preferredLanguage" name="preferredLanguage">
+                                <option value="en" selected>English</option>
+                                <option value="es">Español</option>
+                                <option value="fr">Français</option>
+                                <option value="de">Deutsch</option>
+                                <option value="it">Italiano</option>
+                                <option value="ja">日本語</option>
+                                <option value="zh">中文</option>
+                                <option value="ko">한국어</option>
+                                <option value="pt">Português</option>
+                                <option value="ar">العربية</option>
+                            </select>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                AI will respond in your preferred language.
+                            </div>
+                        </div>
+
+                        <!-- Optional Fields (Collapsible) -->
+                        <div class="optional-fields">
+                            <div class="d-flex align-items-center mb-3">
+                                <h6 class="mb-0 me-2">Optional Information</h6>
+                                <button 
+                                    type="button" 
+                                    class="btn btn-sm btn-outline-secondary" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#optionalFields"
+                                    aria-expanded="false"
+                                >
+                                    <i class="fas fa-chevron-down me-1"></i>
+                                    <span class="toggle-text">Show</span>
+                                </button>
+                            </div>
+                            
+                            <div class="collapse" id="optionalFields">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="phone" class="form-label">Phone Number</label>
+                                        <input 
+                                            type="tel" 
+                                            class="form-control" 
+                                            id="phone" 
+                                            name="phone" 
+                                            placeholder="+1 (555) 123-4567"
+                                            autocomplete="tel"
+                                        >
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label for="skillLevel" class="form-label">Cooking Skill Level</label>
+                                        <select class="form-select" id="skillLevel" name="skillLevel">
+                                            <option value="beginner">Beginner</option>
+                                            <option value="intermediate" selected>Intermediate</option>
+                                            <option value="advanced">Advanced</option>
+                                            <option value="expert">Expert</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="bio" class="form-label">About Me</label>
+                                    <textarea 
+                                        class="form-control" 
+                                        id="bio" 
+                                        name="bio" 
+                                        rows="3" 
+                                        placeholder="Tell us about your cooking interests and goals..."
+                                    ></textarea>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Dietary Preferences</label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="vegetarian" name="dietary[]" value="vegetarian">
+                                                <label class="form-check-label" for="vegetarian">Vegetarian</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="vegan" name="dietary[]" value="vegan">
+                                                <label class="form-check-label" for="vegan">Vegan</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="glutenFree" name="dietary[]" value="gluten-free">
+                                                <label class="form-check-label" for="glutenFree">Gluten-Free</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="keto" name="dietary[]" value="keto">
+                                                <label class="form-check-label" for="keto">Keto</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="paleo" name="dietary[]" value="paleo">
+                                                <label class="form-check-label" for="paleo">Paleo</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="dairyFree" name="dietary[]" value="dairy-free">
+                                                <label class="form-check-label" for="dairyFree">Dairy-Free</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terms and Privacy -->
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                                <label class="form-check-label" for="agreeTerms">
+                                    I agree to the 
+                                    <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#termsModal">Terms of Service</a> 
+                                    and 
+                                    <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a> *
+                                </label>
+                            </div>
+                            <div class="invalid-feedback">You must agree to the terms and privacy policy</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="newsletterOptIn" name="newsletterOptIn" checked>
+                                <label class="form-check-label" for="newsletterOptIn">
+                                    <i class="fas fa-envelope me-1"></i>
+                                    Send me cooking tips and recipe recommendations via email
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid mb-4">
+                            <button type="submit" class="btn btn-success btn-lg" id="signupBtn">
+                                <i class="fas fa-user-plus me-2"></i>
+                                <span class="btn-text">Create Account</span>
+                                <div class="spinner-border spinner-border-sm ms-2 d-none" id="signupSpinner" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div class="text-center">
+                            <small class="text-muted">
+                                By signing up, you agree to receive AI-generated recipe recommendations and cooking tips.
+                            </small>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer bg-light text-center">
+                    <p class="mb-0">
+                        Already have an account? 
+                        <a href="{{ url_for('auth.login') }}" class="text-decoration-none fw-bold">
+                            Sign in here
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Benefits Section -->
+            <div class="benefits-section row mt-4">
+                <div class="col-md-4 mb-3">
+                    <div class="benefit-card card border-0 shadow-sm h-100 text-center">
+                        <div class="card-body">
+                            <i class="fas fa-robot fa-2x text-success mb-3"></i>
+                            <h6>AI-Powered Recipes</h6>
+                            <small class="text-muted">Get personalized recipes created by advanced AI models</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="benefit-card card border-0 shadow-sm h-100 text-center">
+                        <div class="card-body">
+                            <i class="fas fa-globe fa-2x text-success mb-3"></i>
+                            <h6>Multilingual Support</h6>
+                            <small class="text-muted">Recipes and tips in your preferred language</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="benefit-card card border-0 shadow-sm h-100 text-center">
+                        <div class="card-body">
+                            <i class="fas fa-calendar-alt fa-2x text-success mb-3"></i>
+                            <h6>Smart Meal Planning</h6>
+                            <small class="text-muted">Automated meal planning and intelligent shopping lists</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Proof -->
+            <div class="social-proof mt-4">
+                <div class="card border-0 bg-light">
+                    <div class="card-body text-center py-3">
+                        <div class="row">
+                            <div class="col-4">
+                                <h5 class="text-primary mb-1">5,000+</h5>
+                                <small class="text-muted">Happy Cooks</small>
+                            </div>
+                            <div class="col-4">
+                                <h5 class="text-success mb-1">10,000+</h5>
+                                <small class="text-muted">Recipes Generated</small>
+                            </div>
+                            <div class="col-4">
+                                <h5 class="text-warning mb-1">50+</h5>
+                                <small class="text-muted">Cuisines</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Terms of Service Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-file-contract me-2"></i>
+                    Terms of Service
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="terms-content" style="max-height: 400px; overflow-y: auto;">
+                    <h6>1. Acceptance of Terms</h6>
+                    <p>By accessing and using AI Recipe Hub, you accept and agree to be bound by the terms and provision of this agreement.</p>
+                    
+                    <h6>2. Use License</h6>
+                    <p>Permission is granted to temporarily use AI Recipe Hub for personal, non-commercial transitory viewing only. This includes:</p>
+                    <ul>
+                        <li>Generating recipes for personal use</li>
+                        <li>Saving and organizing your favorite recipes</li>
+                        <li>Using meal planning and shopping list features</li>
+                    </ul>
+                    
+                    <h6>3. AI-Generated Content</h6>
+                    <p>Recipes and culinary advice are AI-generated and should be used with reasonable caution. Always verify ingredient safety, cooking temperatures, and food handling practices.</p>
+                    
+                    <h6>4. User Account</h6>
+                    <p>You are responsible for safeguarding your account information and for all activities that occur under your account. You must notify us immediately of any unauthorized use.</p>
+                    
+                    <h6>5. Privacy</h6>
+                    <p>Your privacy is important to us. Please review our Privacy Policy to understand how we collect, use, and protect your information.</p>
+                    
+                    <h6>6. Prohibited Uses</h6>
+                    <p>You may not use our service:</p>
+                    <ul>
+                        <li>For commercial purposes without permission</li>
+                        <li>To generate harmful or dangerous content</li>
+                        <li>To violate any local, state, national, or international law</li>
+                        <li>To share inappropriate or offensive content</li>
+                    </ul>
+                    
+                    <h6>7. Limitation of Liability</h6>
+                    <p>AI Recipe Hub shall not be liable for any damages that result from the use of, or the inability to use, the materials on this site, even if we have been notified orally or in writing of the possibility of such damage.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Privacy Policy Modal -->
+<div class="modal fade" id="privacyModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-shield-alt me-2"></i>
+                    Privacy Policy
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="privacy-content" style="max-height: 400px; overflow-y: auto;">
+                    <h6>Information We Collect</h6>
+                    <p>We collect information you provide directly to us, such as:</p>
+                    <ul>
+                        <li>Account information (name, email, preferences)</li>
+                        <li>Recipe data and meal plans you create</li>
+                        <li>Usage data and interactions with our AI</li>
+                        <li>Device and browser information</li>
+                    </ul>
+                    
+                    <h6>How We Use Information</h6>
+                    <p>We use the information we collect to:</p>
+                    <ul>
+                        <li>Provide and improve our AI recipe generation service</li>
+                        <li>Personalize your experience and recommendations</li>
+                        <li>Send you updates and promotional content (with your consent)</li>
+                        <li>Ensure security and prevent fraud</li>
+                        <li>Analyze usage patterns to improve our service</li>
+                    </ul>
+                    
+                    <h6>Information Sharing</h6>
+                    <p>We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except:</p>
+                    <ul>
+                        <li>To provide services you've requested</li>
+                        <li>To comply with legal obligations</li>
+                        <li>To protect our rights and safety</li>
+                        <li>In connection with a business transfer</li>
+                    </ul>
+                    
+                    <h6>Data Security</h6>
+                    <p>We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. This includes:</p>
+                    <ul>
+                        <li>Encrypted data transmission</li>
+                        <li>Secure password storage</li>
+                        <li>Regular security audits</li>
+                        <li>Limited access to personal information</li>
+                    </ul>
+                    
+                    <h6>Your Rights</h6>
+                    <p>You have the right to:</p>
+                    <ul>
+                        <li>Access your personal data</li>
+                        <li>Correct inaccurate information</li>
+                        <li>Delete your account and data</li>
+                        <li>Export your data</li>
+                        <li>Opt out of marketing communications</li>
+                    </ul>
+                    
+                    <h6>Cookies and Tracking</h6>
+                    <p>We use cookies and similar technologies to enhance your experience, analyze site usage, and assist in our marketing efforts. You can control cookie settings in your browser.</p>
+                    
+                    <h6>Contact Us</h6>
+                    <p>If you have any questions about this Privacy Policy, please contact us at:</p>
+                    <p><strong>Email:</strong> privacy@airecipehub.com<br>
+                    <strong>Address:</strong> AI Recipe Hub Privacy Team<br>
+                    <strong>Last Updated:</strong> August 22, 2025</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const signupForm = document.getElementById('signupForm');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const togglePassword = document.getElementById('togglePassword');
+    const signupBtn = document.getElementById('signupBtn');
+    const signupSpinner = document.getElementById('signupSpinner');
+    
+    // Password strength checker
+    passwordInput.addEventListener('input', checkPasswordStrength);
+    confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+    
+    // Toggle password visibility
+    togglePassword.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        
+        const icon = this.querySelector('i');
+        icon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+    });
+
+    // Toggle optional fields
+    const optionalToggle = document.querySelector('[data-bs-target="#optionalFields"]');
+    if (optionalToggle) {
+        optionalToggle.addEventListener('click', function() {
+            const toggleText = this.querySelector('.toggle-text');
+            const icon = this.querySelector('i');
+            
+            setTimeout(() => {
+                const isExpanded = document.getElementById('optionalFields').classList.contains('show');
+                toggleText.textContent = isExpanded ? 'Hide' : 'Show';
+                icon.className = isExpanded ? 'fas fa-chevron-up me-1' : 'fas fa-chevron-down me-1';
+            }, 100);
+        });
+    }
+
+    // Handle form submission
+    signupForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        if (!validateSignupForm()) {
+            return;
+        }
+
+        // Show loading state
+        signupBtn.disabled = true;
+        signupSpinner.classList.remove('d-none');
+        document.querySelector('.btn-text').textContent = 'Creating Account...';
+
+        try {
+            const formData = new FormData(this);
+            const userData = {
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                email: formData.get('email'),
+                password: formData.get('password'),
+                preferredLanguage: formData.get('preferredLanguage'),
+                phone: formData.get('phone'),
+                bio: formData.get('bio'),
+                skillLevel: formData.get('skillLevel')
+            };
+
+            // Add dietary restrictions
+            const dietaryRestrictions = Array.from(formData.getAll('dietary[]'));
+            if (dietaryRestrictions.length > 0) {
+                userData.dietary_restrictions = dietaryRestrictions;
+            }
+
+            const response = await fetch('/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Store auth token
+                localStorage.setItem('authToken', data.access_token);
+                
+                showAlert('Account created successfully! Welcome to AI Recipe Hub.', 'success');
+                
+                // Redirect to home page
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+            } else {
+                showAlert(data.message || 'Account creation failed', 'error');
+            }
+        } catch (error) {
+            console.error('Signup error:', error);
+            showAlert('Network error. Please check your connection and try again.', 'error');
+        } finally {
+            // Reset loading state
+            signupBtn.disabled = false;
+            signupSpinner.classList.add('d-none');
+            document.querySelector('.btn-text').textContent = 'Create Account';
+        }
+    });
+
+    function checkPasswordStrength() {
+        const password = passwordInput.value;
+        const strengthBar = document.getElementById('passwordStrengthBar');
+        const strengthText = document.getElementById('passwordStrengthText');
+        
+        // Requirements
+        const requirements = {
+            length: password.length >= 8,
+            uppercase: /[A-Z]/.test(password),
+            lowercase: /[a-z]/.test(password),
+            number: /\d/.test(password),
+            special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+        };
+        
+        // Update requirement indicators
+        updateRequirement('length-req', requirements.length);
+        updateRequirement('uppercase-req', requirements.uppercase);
+        updateRequirement('lowercase-req', requirements.lowercase);
+        updateRequirement('number-req', requirements.number);
+        updateRequirement('special-req', requirements.special);
+        
+        // Calculate strength
+        const metRequirements = Object.values(requirements).filter(Boolean).length;
+        let strength = 0;
+        let strengthLabel = 'Very Weak';
+        let strengthColor = 'bg-danger';
+        
+        if (password.length === 0) {
+            strengthLabel = 'Enter a password';
+            strengthColor = 'bg-secondary';
+        } else if (metRequirements === 1) {
+            strength = 20;
+            strengthLabel = 'Very Weak';
+            strengthColor = 'bg-danger';
+        } else if (metRequirements === 2) {
+            strength = 40;
+            strengthLabel = 'Weak';
+            strengthColor = 'bg-danger';
+        } else if (metRequirements === 3) {
+            strength = 60;
+            strengthLabel = 'Fair';
+            strengthColor = 'bg-warning';
+        } else if (metRequirements === 4) {
+            strength = 80;
+            strengthLabel = 'Good';
+            strengthColor = 'bg-info';
+        } else if (metRequirements === 5) {
+            strength = 100;
+            strengthLabel = 'Strong';
+            strengthColor = 'bg-success';
+        }
+        
+        strengthBar.style.width = strength + '%';
+        strengthBar.className = `progress-bar ${strengthColor}`;
+        strengthText.textContent = strengthLabel;
+    }
+    
+    function updateRequirement(elementId, met) {
+        const element = document.getElementById(elementId);
+        if (met) {
+            element.className = 'text-success';
+            element.innerHTML = element.innerHTML.replace(/^.*?(?=At least|One)/, '✓ ');
+        } else {
+            element.className = 'text-muted';
+            element.innerHTML = element.innerHTML.replace('✓ ', '');
+        }
+    }
+    
+    function checkPasswordMatch() {
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+        
+        if (confirmPassword && password !== confirmPassword) {
+            showFieldError('confirmPassword', 'Passwords do not match');
+        } else {
+            clearFieldError('confirmPassword');
+        }
+    }
+
+    function validateSignupForm() {
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+        const agreeTerms = document.getElementById('agreeTerms').checked;
+
+        // Clear previous validation states
+        clearValidationErrors();
+
+        let isValid = true;
+
+        // Validate first name
+        if (!firstName) {
+            showFieldError('firstName', 'First name is required');
+            isValid = false;
+        }
+
+        // Validate last name
+        if (!lastName) {
+            showFieldError('lastName', 'Last name is required');
+            isValid = false;
+        }
+
+        // Validate email
+        if (!email) {
+            showFieldError('email', 'Email is required');
+            isValid = false;
+        } else if (!RecipeApp.validateEmail(email)) {
+            showFieldError('email', 'Please enter a valid email address');
+            isValid = false;
+        }
+
+        // Validate password
+        if (!password) {
+            showFieldError('password', 'Password is required');
+            isValid = false;
+        } else {
+            const requirements = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /\d/.test(password),
+                special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+            };
+            
+            const metRequirements = Object.values(requirements).filter(Boolean).length;
+            if (metRequirements < 5) {
+                showFieldError('password', 'Password does not meet all requirements');
+                isValid = false;
+            }
+        }
+
+        // Validate password confirmation
+        if (!confirmPassword) {
+            showFieldError('confirmPassword', 'Please confirm your password');
+            isValid = false;
+        } else if (password !== confirmPassword) {
+            showFieldError('confirmPassword', 'Passwords do not match');
+            isValid = false;
+        }
+
+        // Validate terms agreement
+        if (!agreeTerms) {
+            showFieldError('agreeTerms', 'Please agree to the Terms of Service and Privacy Policy');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function showFieldError(fieldId, message) {
+        const field = document.getElementById(fieldId);
+        const feedback = field.parentElement.querySelector('.invalid-feedback') || 
+                        field.closest('.input-group')?.parentElement.querySelector('.invalid-feedback') ||
+                        field.closest('.form-check')?.querySelector('.invalid-feedback');
+        
+        field.classList.add('is-invalid');
+        if (feedback) {
+            feedback.textContent = message;
+        }
+    }
+    
+    function clearFieldError(fieldId) {
+        const field = document.getElementById(fieldId);
+        field.classList.remove('is-invalid');
+    }
+
+    function clearValidationErrors() {
+        document.querySelectorAll('.is-invalid').forEach(field => {
+            field.classList.remove('is-invalid');
+        });
+        document.querySelectorAll('.invalid-feedback').forEach(feedback => {
+            feedback.textContent = '';
+        });
+    }
+
+    function showAlert(message, type) {
+        // Use the global RecipeApp.showAlert if available, otherwise create simple alert
+        if (window.RecipeApp && RecipeApp.showAlert) {
+            RecipeApp.showAlert(message, type);
+        } else {
+            alert(message);
+        }
+    }
+
+    // Real-time validation
+    document.getElementById('email').addEventListener('blur', function() {
+        if (this.value.trim() && !RecipeApp.validateEmail(this.value.trim())) {
+            showFieldError('email', 'Please enter a valid email address');
+        } else {
+            clearFieldError('email');
+        }
+    });
+
+    // Auto-focus first field
+    document.getElementById('firstName').focus();
+});
+</script>
+{% endblock %}

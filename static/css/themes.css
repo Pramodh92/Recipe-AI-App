@@ -1,0 +1,125 @@
+:root {
+  /* Backgrounds */
+  --bg-primary: #fffdf8;        /* Soft cream background (welcoming, not harsh white) */
+  --bg-secondary: #fff5e9;      /* Warm beige for sections/cards */
+
+  /* Text */
+  --text-primary: #2d1b0d;      /* Deep brown (coffee/chocolate tone) */
+  --text-secondary: #7b5e57;    /* Muted cocoa for secondary text */
+
+  /* Borders & Shadows */
+  --border-color: #e0cfc2;      /* Light warm beige border */
+  --shadow-color: rgba(90, 60, 40, 0.15); /* Cozy soft brown shadow */
+
+  /* Brand Colors (Food Inspired) */
+  --primary-color: #ff7043;     /* Appetizing orange (for CTAs, highlights) */
+  --secondary-color: #8d6e63;   /* Earthy brown (menus, footer) */
+
+  /* Status Colors (Food Tone Adjusted) */
+  --success-color: #4caf50;     /* Fresh green (healthy vibe) */
+  --info-color: #29b6f6;        /* Light sky blue (info highlights) */
+  --warning-color: #ffb74d;     /* Toasted amber (warnings) */
+  --danger-color: #e53935;      /* Tomato red (errors/delete) */
+
+  /* Utility */
+  --light-color: #fffaf3;       /* Off-white accents */
+  --dark-color: #3e2723;        /* Rich coffee brown */
+}
+
+
+[data-theme="dark"] {
+    /* Dark theme */
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --text-primary: #f8f9fa;
+    --text-secondary: #adb5bd;
+    --border-color: #343a40;
+    --primary-color: #c6b8a9;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --info-color: #0dcaf0;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Apply theme variables to elements */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.bg-light {
+    background-color: var(--bg-secondary) !important;
+}
+
+.card {
+    background-color: var(--bg-primary);
+    border-color: var(--border-color);
+}
+
+.card-header {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+.navbar {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+.form-control {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.form-control:focus {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.modal-content {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.dropdown-menu {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.dropdown-item {
+    color: var(--text-primary);
+}
+
+.dropdown-item:hover {
+    background-color: var(--bg-secondary);
+}
+
+.list-group-item {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.table {
+    color: var(--text-primary);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: var(--bg-secondary);
+}
+
+/* Theme toggle icon */
+#themeIcon {
+    transition: transform 0.3s ease;
+}
+
+[data-theme="dark"] #themeIcon {
+    transform: rotate(180deg);
+}
